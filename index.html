@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="RedJr Builders product ordering and inventory management prototype.">
+<meta name="theme-color" content="#121212">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RedJr Builders | Point of Sale & Inventory</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <section class="login-brand">
+    <div class="login-brand-content">
+      <div class="brand-name">
+        <span>RedJr Builders</span>
+        <span>&amp; Construction Supply</span>
+      </div>
+      <div class="login-brand-rule" aria-hidden="true"></div>
+    </div>
+  </section>
+  <section class="login-form-wrap">
+    <form class="login-card" id="loginForm">
+      <h2>Login</h2>
+      <label for="email">Email</label>
+      <input id="email" type="email" required placeholder="Enter your email address" autocomplete="username">
+      <label for="password">Password</label>
+      <div class="password-field"><input id="password" type="password" required placeholder="Enter your password" autocomplete="current-password" minlength="6"><button id="togglePassword" class="password-toggle" type="button" aria-label="Show password">Show</button></div>
+      <div class="login-options"><label class="remember-row"><input id="rememberEmail" type="checkbox"> Remember me</label><a href="#" id="forgotPassword">Forgot password?</a></div>
+      <button class="primary login-submit" type="submit">Login</button>
+    </form>
+  </section>
+</div>
+<div id="app" class="app hidden">
+<aside id="sidebar" class="sidebar">
+  <div class="side-brand"><strong>RedJr Builders</strong><small>&amp; Construction Supply</small></div>
+  <div class="nav-label">Workspace</div>
+  <nav class="nav" aria-label="Main navigation">
+    <button data-page="dashboard" class="active"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span><span class="nav-text">Dashboard</span></button>
+    <button data-page="cashier"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></span><span class="nav-text">Cashier</span></button>
+    <button data-page="orders"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></span><span class="nav-text">Orders</span><span id="navOrderCount" class="badge b-red hidden"></span></button>
+    <button data-page="inventory"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg></span><span class="nav-text">Inventory</span></button>
+    <button data-page="reports"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V4M4 20h16"/><rect x="8" y="12" width="3" height="5" rx=".6"/><rect x="13" y="8" width="3" height="9" rx=".6"/></svg></span><span class="nav-text">Reports</span></button>
+    <button data-page="history"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="nav-text">History</span></button>
+  </nav>
+</aside>
+<main class="main">
+<header class="topbar">
+  <div class="topbar-left"><button id="mobileMenu" class="secondary mobile-menu" aria-label="Open navigation">☰</button><span id="todayLabel" class="date-label"></span></div>
+  <div class="top-actions">
+    <div class="header-user"><span id="headerAvatar" class="avatar">JA</span><div class="header-user-info"><strong id="headerName">Janelle Andoy</strong><small id="headerRole">Admin</small></div></div>
+    <div class="profile-menu"><button id="profileButton" class="profile-more" aria-label="Open account menu">⋮</button><div id="profilePop" class="profile-pop hidden"><button id="profileDetails">Account details</button><button id="exportData">Export orders (CSV)</button><button id="resetDemo">Reset demo data</button><button id="startFresh">Start fresh (go live)</button><button id="logoutButton">Sign out</button></div></div>
+  </div>
+</header>
+<div class="content">
+<section id="page-dashboard" class="page">
+<div class="page-head"><div><h1 id="greeting">Good morning, Admin</h1><p>Here’s what’s happening with your store today.</p></div></div>
+<div class="stats" id="dashboardStats"></div>
+<section class="panel" style="margin-bottom:18px"><div class="panel-head"><div><h3>Monthly sales</h3><div class="panel-sub">Completed sales per month · last 6 months</div></div><button class="outline small" onclick="navigate('reports')">Full report</button></div><div class="panel-body"><div id="dashMonthly" class="chart-wrap"></div></div></section>
+<div class="layout-2"><section class="panel"><div class="panel-head"><div><h3>Recent orders</h3></div><button class="outline small" onclick="navigate('orders')">View all</button></div><div id="recentOrders" class="table-wrap"></div></section>
+<section class="panel"><div class="panel-head"><div><h3>Inventory watch</h3></div><button class="outline small" onclick="navigate('inventory')">Manage stock</button></div><div class="panel-body"><div id="inventoryWatch" class="quick-list"></div></div></section></div>
+</section>
+<section id="page-cashier" class="page hidden">
+<div class="page-head cashier-page-head"><div></div><div class="page-actions"><button class="outline" onclick="openAddProduct()">＋ Add product</button><button class="outline" onclick="openDaySummary()">Today’s summary</button></div></div>
+<div class="order-layout"><div>
+<div class="scan-panel"><div class="scan-head"><div class="scan-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 7V5a1 1 0 011-1h2M17 4h2a1 1 0 011 1v2M20 17v2a1 1 0 01-1 1h-2M7 20H5a1 1 0 01-1-1v-2M8 8v8M11 8v8M14 8v8M17 8v8"/></svg><div><strong>Barcode scanner</strong></div></div><div class="scan-actions"><button id="camScanBtn" class="outline small" type="button">Use camera</button><button id="barcodeListBtn" class="outline small" type="button">Barcode list</button></div></div><input id="scanInput" class="scan-input" placeholder="Scan barcode here…" autocomplete="off" inputmode="none" aria-label="Barcode scanner input"><div id="scanResult" class="scan-result idle hidden" aria-live="polite"></div><div id="camBox" class="cam-box hidden"><video id="camVideo" playsinline muted></video><button id="camStop" class="danger small" type="button">Stop camera</button></div></div>
+<div class="toolbar"><div class="search pos-search"><input id="posSearch" placeholder="Search product name or SKU…" aria-label="Search products" autocomplete="off"></div><select id="posSort" aria-label="Sort products"><option value="category">Sort: By category</option><option value="name">Sort: Name A–Z</option><option value="price-low">Price: Low to high</option><option value="price-high">Price: High to low</option><option value="stock">Stock: Lowest first</option></select></div>
+<div id="posCategoryChips" class="category-row" style="margin-bottom:15px"></div>
+<div id="posGrid" class="pos-grid"></div></div>
+<button id="posMobileBar" class="primary mobile-cartbar hidden"></button>
+<aside id="posCartPanel" class="panel cart-panel"><div class="panel-head"><div><h3>Current sale</h3></div><span id="posCount" class="badge b-blue">0 items</span></div><div class="panel-body">
+<label for="posCustomer" style="margin-top:0">Customer (optional)</label><input id="posCustomer" placeholder="Walk-in customer">
+<label for="posFulfillment">Store Pick and Delivery</label><select id="posFulfillment"><option value="Pickup">Store Pick-up</option><option value="Delivery">Delivery</option></select>
+<div id="posLines" class="pos-cart-lines" style="margin-top:6px"></div>
+<div id="posSummary"></div>
+<div class="cart-actions"><button id="posChargeBtn" class="primary charge-btn">Charge</button><button id="posClearBtn" class="outline">Clear</button></div></div></aside></div>
+</section>
+<section id="page-orders" class="page hidden">
+<div class="page-head orders-page-head"><div></div><div class="page-actions"><button class="primary" onclick="navigate('cashier')">＋ New order</button></div></div>
+<div class="stats" id="orderStats"></div><div class="panel"><div class="panel-body"><div class="toolbar"><div class="search"><input id="orderSearch" placeholder="Search order ID or customer..." aria-label="Search orders"></div><select id="orderStatusFilter"><option value="All">All statuses</option><option>Pending</option><option>Confirmed</option><option>Ready for pickup</option><option>Out for delivery</option><option>Completed</option><option>Cancelled</option></select></div><div id="ordersTable" class="table-wrap"></div></div></div>
+</section>
+<section id="page-inventory" class="page hidden">
+<div class="page-head"><div class="page-actions" style="margin-left:auto"><button class="outline" onclick="exportCSV('inventory')">Export CSV</button><button class="primary" onclick="openAddProduct()">＋ Add product</button></div></div>
+<div class="stats" id="inventoryStats"></div>
+<div class="panel"><div class="panel-body"><div class="toolbar inventory-toolbar"><div class="search"><input id="inventorySearch" placeholder="Search products" aria-label="Search products"></div><select id="inventoryStockFilter" aria-label="Filter stock levels"><option value="all">All stock levels</option><option value="low">Low stock</option><option value="out">Out of stock</option><option value="in">In stock</option></select></div><div id="inventoryTable" class="table-wrap"></div></div></div>
+</section>
+<section id="page-reports" class="page hidden">
+<div class="page-head"><div class="page-actions" style="margin-left:auto"><button class="outline" onclick="window.print()">Print report</button><button class="primary" onclick="exportCSV('orders')">Export orders CSV</button></div></div>
+<div class="stats" id="reportStats"></div>
+<section class="panel" style="margin-bottom:18px"><div class="panel-head"><div><h3>Monthly sales</h3></div><div class="chart-controls"><select id="repMetric" aria-label="Metric"><option value="sales">Sales (₱)</option><option value="count">Number of orders</option></select><select id="repMonths" aria-label="Period"><option value="6">Last 6 months</option><option value="12" selected>Last 12 months</option></select></div></div><div class="panel-body"><div id="repMonthly" class="chart-wrap"></div><div id="repMonthlySummary" class="chart-summary"></div></div></section>
+<div class="layout-2"><section class="panel"><div class="panel-head"><div><h3>Top Selling Product</h3><div class="panel-sub">Units sold per product · completed and active orders</div></div></div><div class="panel-body"><div class="chart-wrap" id="topProducts"></div></div></section><section class="panel"><div class="panel-head"><div><h3>Sales by order status</h3><div class="panel-sub">Order count by current status</div></div></div><div class="panel-body" id="statusBars"></div></section></div>
+</section>
+<section id="page-history" class="page hidden">
+<div class="panel"><div class="history-panel-head"><button class="outline" onclick="clearHistory()">Clear history</button></div><div class="panel-body"><div class="toolbar"><div class="search"><input id="historySearch" placeholder="Search activity..." aria-label="Search activity history"></div></div><div id="historyTable" class="table-wrap"></div></div></div>
+</section>
+<div class="footer-note">POS v2.0 · Data is saved in this browser</div>
+</div></main></div>
+<div id="modalRoot"></div><div id="toastRegion" class="toast-region" aria-live="polite"></div>
+<script src="script.js" defer></script>
+</body>
+</html>
